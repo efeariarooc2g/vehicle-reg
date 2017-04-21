@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 //import isAuthenticated from './funcs/authentic';
-
+import Public from './pages/Public';
 import Main from './pages/Main';
-import FBLoginButton from './components/FBLoginButton';
+
 import checkLoginState from './funcs/checkLoginStatus';
 
 class App extends Component {
@@ -23,7 +23,7 @@ class App extends Component {
     
     return (
         <Route path="/" render={() => {
-          return this.state.isLoggedin ? <Main /> : <FBLoginButton />
+          return this.state.isLoggedin ? <Main /> : <Public />
         }} />
     );
   }

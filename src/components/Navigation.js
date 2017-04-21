@@ -1,22 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import isAuthenticated from '../funcs/authentic';
+//import isAuthenticated from '../funcs/authentic';
 
 class Navigation extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			isAuthenticated: false
+			isAuthentic: false
 		}
 	}
 	componentDidMount(){
-		let auth = isAuthenticated();
-		this.setState({ isAuthenticated: auth  });
+		let auth = false;//isAuthenticated();
+		this.setState({ isAuthentic: auth  });
 	}
 	render () {
 		let links = '';
 
-		if(this.state.isAuthenticated){
+		if(this.state.isAuthentic){
 			links = (
 	        <ul className="nav navbar-nav navbar-right">
 	          <li><Link to="/home">Home</Link></li>

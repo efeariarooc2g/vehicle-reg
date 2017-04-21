@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-import isAuthenticated from './funcs/authentic';
+//import isAuthenticated from './funcs/authentic';
 
 import Main from './pages/Main';
-import Public from './pages/Public';
+import FBLoginButton from './components/FBLoginButton';
+import checkLoginState from './funcs/checkLoginStatus';
 
 class App extends Component {
   constructor(props){
@@ -15,13 +16,14 @@ class App extends Component {
   }
 
   componentDidMount(){
-    this.setState({ isLoggedin : isAuthenticated() })
+    checkLoginState();
   }
+
   render() {
-    let authenticated = this.state.isLoggedin;
+    
     return (
         <Route path="/" render={() => {
-          return authenticated ? <Main /> : <Public />
+          return this.state.isLoggedin ? <Main /> : <FBLoginButton />
         }} />
     );
   }

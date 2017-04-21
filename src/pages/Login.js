@@ -4,7 +4,7 @@ import InputField from '../components/form/InputField';
 import isEmpty from 'lodash/isEmpty';
 import SubmitButton from '../components/form/SubmitButton';
 import validate from '../components/form/validate';
-import isAuthenticated from '../funcs/authentic';
+//import isAuthenticated from '../funcs/authentic';
 import axios from 'axios';
 
 class Login extends Component {
@@ -22,7 +22,7 @@ class Login extends Component {
 	}
 
 	componentDidMount(){
-		this.setState({ isLoggedin: isAuthenticated() });
+		this.setState({ isLoggedin: false });
 	}
 
 	getVal(e){

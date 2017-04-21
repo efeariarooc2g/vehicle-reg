@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+/*import jwt from 'jsonwebtoken';
 //import config from '../../config';
 
 let config = {
@@ -42,4 +42,4 @@ let isAdmin = () => {
 
 	return admin;
 }
-export { isAuthenticated, isAdmin };
+export { isAuthenticated, isAdmin };*/

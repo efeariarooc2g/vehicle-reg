@@ -10,9 +10,9 @@ class Main extends React.Component{
 		return (
 			<div className="container">
 				<Navigation />
-				<Route path="/signup" component={Registrant} />
-				<Route path="/welcome" component={Welcome} />
-				<Route path="/login" component={Login} />
+				<Route path="/UserProfile" component={Registrant} />
+				<Route path="/VehicleRegister" component={Welcome} />
+				<Route path="/Applcations" component={Login} />
 			</div>
 		);
 	}

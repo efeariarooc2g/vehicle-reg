@@ -101,9 +101,8 @@ class Login extends Component {
 				/>
 			</form>
 			</div>
-			<div className="col-md-4 col-md-offset-4">
-				
-			<FBLoginButton />
+			<div className="col-md-4 col-md-offset-4" style={{marginTop: '10px'}}>
+				<FBLoginButton />
 			</div>
 			</div>
 		);

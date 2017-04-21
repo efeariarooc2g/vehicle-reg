@@ -78,7 +78,8 @@ class Registrant extends React.Component {
 					this.setState({ completed: true })
 				}
 			},
-				({ data }) => {
+				({ response }) => {
+					let errors = response.data;
 					this.setState({ errors });
 				});
 		} else {

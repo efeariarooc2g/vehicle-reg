@@ -9,8 +9,8 @@ import SubmitButton from '../components/form/SubmitButton';
 import validate from '../components/form/validate';
 //import { states, genders } from '../../config';
 
-let states = {
-	"AB":"Abia", "AD":"Adamawa", "AN":"Anambra", "AK":"Akwa Ibom" 
+let apptypelist = {
+	"CM":"Commercial", "AR":"Articulated", "PR":"Private", "BK":"Motorcycle" 
 };
 
 let genders = {
@@ -103,13 +103,21 @@ class VehicleReg extends React.Component {
 			<div className="col-md-4 col-md-offset-4">
 				<form onSubmit={this.submitForm} >
 					<h2>Vehicle Registration</h2>
-					<InputField
-						label="First Name"
-						type="text"
-						name="firstname"
+					<SelectDropDown
+						label="Application Type"
+						name="apptype"
 						onChange={this.getVal}
-						value={firstname}
-						error={errors.firstname}
+						value={apptype}
+						error={errors.apptype}
+						options={apptypelist}
+					/>
+					<InputField
+						label="Test Score"
+						type="text"
+						name="testscore"
+						onChange={this.getVal}
+						value={testscore}
+						error={errors.testscore}
 					/>
 					
 					<InputField
@@ -121,12 +129,12 @@ class VehicleReg extends React.Component {
 						error={errors.lastname}
 					/>
 					<InputField
-						label="Date of Birth"
+						label="Location of Application"
 						type="text"
-						name="dob"
+						name="applocal"
 						onChange={this.getVal}
-						value={dob}
-						error={errors.dob}
+						value={applocal}
+						error={errors.applocal}
 					/>
 					<InputField
 						label="Residential Address"

@@ -23,4 +23,23 @@ let isAuthenticated = () => {
 	return authenticated;
 }
 
-export default isAuthenticated;
+let isAdmin = () => {
+	let admin = false;
+	if(localStorage.vehJwtToken){
+		let token = localStorage.vehJwtToken;
+		jwt.verify(token, config.jwtSecret, (err, decoded) => {
+			if(err){
+				admin = false;
+			} else {
+				admin = true;
+				;
+				if(decoded.isadmin === "Y"){
+					admin = true
+				}
+			}
+		});
+	} 
+
+	return admin;
+}
+export { isAuthenticated, isAdmin };

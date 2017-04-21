@@ -20,6 +20,8 @@ class Navigation extends React.Component {
 			links = (
 	        <ul className="nav navbar-nav navbar-right">
 	          <li><Link to="/home">Home</Link></li>
+	          <li><Link to="/home">My Registrations</Link></li>
+	          <li><Link to="/home">All Registrations</Link></li>
 	          <li><a onClick={this.logOut}>Logout</a></li>
 	        </ul>
 	      );
@@ -28,6 +30,7 @@ class Navigation extends React.Component {
 	        <ul className="nav navbar-nav navbar-right">
 	          <li><Link to="/signup">Sign up</Link></li>
 	          <li><Link to="/login">Login</Link></li>
+	          <li><Link to="/adminregister">Register as Admin</Link></li>
 	        </ul>
 	      );
 	    }

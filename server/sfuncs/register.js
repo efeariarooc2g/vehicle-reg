@@ -1,4 +1,5 @@
 import express from 'express';
+//import mailer from 'express-mailer';
 import Validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
 import User from '../db/models/user';
@@ -9,7 +10,7 @@ let router = express.Router();
 router.post('/', (req, res) => {
 	let errors = validateInput(req.body);
 	const { firstname, lastname, soo, dob, occupation, password, 
-			confpassword, address, gender, email } = req.body;
+			confpassword, address, gender, isadmin, email } = req.body;
 	if(isEmpty(errors)){
 		if(doesValExist({ email })){
 			errors.email = "Email already exists";
@@ -20,8 +21,10 @@ router.post('/', (req, res) => {
 		let password_hash = bcrypt.hashSync(password, 10);
 		console.log('On the matter');
 		User.forge({ firstname, lastname, soo, dob, occupation, password_hash,
-		 address, gender, email }).save()
-		.then(user => res.json({ success: true }))
+		 address, gender, email, isadmin }).save()
+		.then(user => {
+			res.json({ success: true });
+		})
 		.catch((err) => {
 			console.log('I messed up');
 			res.status(500).json({ error: err });
@@ -63,6 +66,7 @@ function validateInput(body){
 	if(Validator.isEmpty(soo)){
 		errors.soo = "This field must be provided";
 	}
+
 	if(Validator.isEmpty(dob)){
 		errors.dob = "This field must be provided";
 	}

@@ -1,7 +1,5 @@
-let states = {
-		"Abia": 'Umuahia'
-	}; 
-let jwtSecret = 'Iamonahotseat';
-export {
-	states, jwtSecret
+let config = {
+	jwtSecret: 'Iamstillonahotseat'
 };
+
+export default config;

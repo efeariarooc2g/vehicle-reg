@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import InputField from '../components/form/InputField';
 import isEmpty from 'lodash/isEmpty';
 import SubmitButton from '../components/form/SubmitButton';
 import validate from '../components/form/validate';
+import isAuthenticated from '../funcs/authentic';
 import axios from 'axios';
 
 class Login extends Component {
@@ -13,14 +15,15 @@ class Login extends Component {
 			username: '',
 			password: '',
 			errors: {},
-			isLoggedin: 'false',
-			sessionID: undefined
+			isLoggedin: false,
 		};
 		this.getVal = this.getVal.bind(this);
 		this.submitForm = this.submitForm.bind(this);
 	}
 
-
+	componentDidMount(){
+		this.setState({ isLoggedin: isAuthenticated() });
+	}
 
 	getVal(e){
 		this.setState({
@@ -41,7 +44,6 @@ class Login extends Component {
 	submitForm(e){
 		e.preventDefault();
 
-
 		let { errors } = this.state;
 		if(isEmpty(errors)){
 			axios.post('/api/login', this.state)
@@ -51,7 +53,7 @@ class Login extends Component {
 				console.log(data.data);
 				console.log(token);
 				this.setSession(token);
-				this.context.router.history.push('/home');
+				this.setState({ isLoggedin: true });
 			},
 			({ response }) => {
 				errors = response.data;
@@ -61,8 +63,12 @@ class Login extends Component {
 	}
 
 	render(){
-
+		if(this.state.isLoggedin){
+			return <Redirect to="/home" />
+		}
 		const { username, password, errors } = this.state;
+
+		//if(this.state.isLoggedin)
 		return (
 			<div className="col-md-4 col-md-offset-4">
 			
@@ -71,7 +77,7 @@ class Login extends Component {
 				{ errors.error && <div className="alert alert-danger">{errors.error}</div> }
 				<InputField
 					name="username"
-					label="Username / Email"
+					label="Email"
 					type="text"
 					value={username}
 					onChange={this.getVal}
@@ -85,6 +91,7 @@ class Login extends Component {
 					onChange={this.getVal}
 					error={errors.password}
 				/>
+
 				<SubmitButton
 					type="submit"
 					name="Login"

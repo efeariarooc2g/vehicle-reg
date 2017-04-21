@@ -1,14 +1,27 @@
 import React, { Component } from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import Main from './pages/Main';
+import { Route } from 'react-router-dom';
+import isAuthenticated from './funcs/authentic';
 
+import Main from './pages/Main';
+import Public from './pages/Public';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      isLoggedin: false
+    };
+  }
+
+  componentDidMount(){
+    this.setState({ isLoggedin : isAuthenticated() })
+  }
   render() {
-    let isLoggedin = true;
+    let authenticated = this.state.isLoggedin;
     return (
         <Route path="/" render={() => {
-          return isLoggedin ? <Main /> : <Redirect to="/login" />
+          return authenticated ? <Main /> : <Public />
         }} />
     );
   }

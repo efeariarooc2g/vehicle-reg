@@ -93,6 +93,12 @@ class Registrant extends React.Component {
 		if(completed){
 			return <Redirect to="/welcome" />
 		}
+
+		let isadmin = "N";
+		if(this.props.match.path === 'adminregister'){
+			isadmin = "Y";
+		}
+
 		return (
 			<div className="col-md-4 col-md-offset-4">
 				<form onSubmit={this.submitForm} >
@@ -179,6 +185,15 @@ class Registrant extends React.Component {
 						error={errors.gender}
 						options={genders}
 					/>
+					<InputField
+						label=""
+						type="hidden"
+						name="isadmin"
+						onChange={this.getVal}
+						value={isadmin}
+						error={errors.isadmin}
+					/>
+					
 					<SubmitButton 
 						type="submit"
 						name="Submit"

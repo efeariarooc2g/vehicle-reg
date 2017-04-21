@@ -1,4 +1,6 @@
+
 import React, { Component } from 'react';
+import FBLoginButton from '../components/FBLoginButton';
 import { Redirect } from 'react-router-dom';
 import InputField from '../components/form/InputField';
 import isEmpty from 'lodash/isEmpty';
@@ -70,6 +72,7 @@ class Login extends Component {
 
 		//if(this.state.isLoggedin)
 		return (
+			<div className="row">
 			<div className="col-md-4 col-md-offset-4">
 			
 			<form onSubmit={this.submitForm}>
@@ -98,6 +101,11 @@ class Login extends Component {
 				/>
 			</form>
 			</div>
+			<div className="col-md-4 col-md-offset-4">
+				
+			<FBLoginButton />
+			</div>
+			</div>
 		);
 	}
 }
@@ -105,5 +113,6 @@ class Login extends Component {
 Login.contextTypes = {
 	router: React.PropTypes.object.isRequired
 }
+
 
 export default Login;

@@ -2,6 +2,7 @@ import express from 'express';
 import Validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
 import User from '../db/models/user';
+import UserLogin from '../db/models/userlogin';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 //import config from '../../config';
@@ -53,37 +54,54 @@ router.post('/', (req, res) => {
 router.post('/registered', (req, res) => {
 	let { id, access } = req.body;
 	let status = 0;
+	let errors = 0;
 
-	Access.forge({
-		fbId,
-		fbToken: access,
-		userToken: token
-	}).fetch().then((access) => {
-		if(!access){
+	if(Validator.isEmpty(id) || Validator.isEmpty(access)){
+		res.status(401).json({ error: 'Invalid Credentials'});
+	}
+
+	UserLogin.query({
+		where:{ fbId: id },
+		orWhere:{ fbToken: access }
+	}).fetch().then((userlogin) => {
+		console.log({ id, access });
+		console.log(userlogin);
+		if(!userlogin){
 			// insert new user
-			Access.forge({ 
+			UserLogin.forge({ 
 				fbId: id,
-				fbToken: access,
-
-
-			}).save().then((access) => {
-				if(access){
+				fbToken: access
+			}, { hasTimestamps: true }).save().then((newlogin) => {
+				if(newlogin){
+					let token = getAPIToken(
+						newlogin.get('id'), 
+						newlogin.get('fbId'), 
+						newlogin.get('fbToken')
+					);
 					status = 1;
+					res.json({ token, status })
 				} else {
 					res.status(400).json({ error: 'User not saved'})
 				}
 			});
 		} else {
+			let token = getAPIToken(
+				userlogin.get('id'), 
+				userlogin.get('fbId'), 
+				userlogin.get('fbToken')
+			);
 			status = 2;
+			res.json({ token, status });
 		}
-	}));
+	});
 });
 
 
-getAPIToken(id, access){
+function getAPIToken(id, fbid, fbToken){
 	return jwt.sign({
-	let userToken =	id,
-		access
+		id,
+		fbid,
+		fbToken
 	}, config.jwtSecret);
 }
 

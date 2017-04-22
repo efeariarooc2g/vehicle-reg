@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 import Public from './pages/Public';
 import Main from './pages/Main';
 import axios from 'axios';
+import isEmpty from 'lodash/isEmpty';
 
 //import checkLoginState from './funcs/checkLoginStatus';
 
@@ -59,13 +60,22 @@ class App extends Component {
     console.log(response);
     if(response.status === 'connected'){
       this.setState({ isLoggedin: true });
-      this.checkIfUserExists(response.id, response.accessToken);
+
+      let authResponse = response.authResponse;
+      this.checkIfUserExists(authResponse.userID, authResponse.accessToken);
     }
   }
 
+  setSession(token){
+    if(!isEmpty(token)){
+      localStorage.setItem('vehJwtToken', token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+  }
   checkIfUserExists(id, access){
     axios.post('/api/login/registered', {id, access}).then((data) => {
-
+      let token = data.data.token;
+      this.setSession(token);
     });
   }
 

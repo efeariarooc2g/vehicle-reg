@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 import register from './sfuncs/register';
-import userlogin from './sfuncs/userlogin';
+import userlogin from './sfuncs/userauth';
 
 const app = express();
 

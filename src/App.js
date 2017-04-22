@@ -3,12 +3,15 @@ import { Route } from 'react-router-dom';
 //import isAuthenticated from './funcs/authentic';
 import Public from './pages/Public';
 import Main from './pages/Main';
+import axios from 'axios';
 
 //import checkLoginState from './funcs/checkLoginStatus';
 
 class App extends Component {
   constructor(props){
     super(props);
+
+    this.FB = {};
 
     this.state = {
       isLoggedin: false
@@ -24,7 +27,7 @@ class App extends Component {
       xfbml      : true,  // parse social plugins on this page
       version    : 'v2.1' // use version 2.1
     });
-
+    this.FB = window.FB;
     // Now that we've initialized the JavaScript SDK, we call
     // FB.getLoginStatus().  This function gets the state of the
     // person visiting this page and can return one of three states to
@@ -53,20 +56,37 @@ class App extends Component {
   }
 
   statusChangeCallback(response){
+    console.log(response);
     if(response.status === 'connected'){
       this.setState({ isLoggedin: true });
-      console.log(this.state);
+      this.checkIfUserExists(response.id, response.accessToken);
     }
   }
 
+  checkIfUserExists(id, access){
+    axios.post('/api/login/registered', {id, access}).then((data) => {
+
+    });
+  }
+
   render() {
-    
+    console.log(this.state);
+
+    let fbAPI = this.FB;
+    let isLoggedin = this.state.isLoggedin;
+    let props = { fbAPI, isLoggedin };
     return (
-        <Route path="/" render={() => {
-          return this.state.isLoggedin ? <Main /> : <Public />
-        }} />
+        <Route path="/" render={() => 
+          <MyCheck {...props} />
+        } />
     );
   }
 }
+
+
+let MyCheck = (props) => {
+  return props.isLoggedin ? <Main {...props} /> : <Public {...props} />;
+}
+
 
 export default App;

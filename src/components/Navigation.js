@@ -8,10 +8,18 @@ class Navigation extends React.Component {
 		this.state = {
 			isAuthentic: false
 		}
+
 	}
 	componentDidMount(){
-		let auth = false;//isAuthenticated();
-		this.setState({ isAuthentic: auth  });
+		//let auth = false;//isAuthenticated();
+		//this.setState({ isAuthentic: auth  });
+		this.setState({ isAuthentic: this.props.isLoggedin });
+	}
+
+	logOut(){
+		window.FB.logout((response) => {
+			this.setState({ isAuthentic: false });
+		});
 	}
 	render () {
 		let links = '';
@@ -22,15 +30,15 @@ class Navigation extends React.Component {
 	          <li><Link to="/home">Home</Link></li>
 	          <li><Link to="/home">My Registrations</Link></li>
 	          <li><Link to="/home">All Registrations</Link></li>
-	          <li><a onClick={this.logOut}>Logout</a></li>
+	          <li><Link to="/adminregister">Register as Admin</Link></li>
+	          <li><Link to="/signup">My Personal Data</Link></li>
+	          <li><a onClick={this.logOut.bind(this)}>Logout</a></li>
 	        </ul>
 	      );
 	    } else {
 	      links = (
 	        <ul className="nav navbar-nav navbar-right">
-	          <li><Link to="/signup">Sign up</Link></li>
 	          <li><Link to="/login">Login</Link></li>
-	          <li><Link to="/adminregister">Register as Admin</Link></li>
 	        </ul>
 	      );
 	    }

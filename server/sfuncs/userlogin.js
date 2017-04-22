@@ -50,4 +50,8 @@ router.post('/', (req, res) => {
 	}
 });
 
+router.post('/registered', (req, res) => {
+	let token
+});
+
 export default router;

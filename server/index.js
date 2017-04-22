@@ -1,8 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 
-import register from './sfuncs/register';
-import userlogin from './sfuncs/userauth';
+import register from './routes/register';
+import userlogin from './routes/userauth';
 
 const app = express();
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+//import { Redirect } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
 import Validator from 'validator';
 import axios from 'axios';
@@ -24,8 +24,6 @@ class Registrant extends React.Component {
 		this.state = {
 			firstname: '',
 			lastname: '',
-			password: '',
-			confpassword: '',
 			email: '',
 			dob: '',
 			address: '',
@@ -40,12 +38,32 @@ class Registrant extends React.Component {
 		this.submitForm = this.submitForm.bind(this);
 	}
 
+	componentDidMount(){
+		axios.get('/api/register')
+		.then((data) => {
+			let user = data.data;
+			this.setState({ 
+				firstname: user.firstname,
+				lastname: user.lastname,
+				email: user.email,
+				dob: user.dob,
+				address: user.address,
+				gender: user.gender,
+				occupation: user.occupation,
+				soo: user.soo 
+			});
+			//let jwtdata = localStorage.getItem('sessionid');
+		},
+		({ response }) => {
+
+			let errors = this.state.errors;
+			errors.nodata = response.data;
+			this.setState({ errors });
+		});
+	}
+
 	validateInput(){
-		const { email, password, confpassword, errors } = this.state;
-		
-		if(!Validator.equals(password, confpassword)){
-			errors.confpassword = 'Confirmation Password must be same as Password provided';
-		}
+		const { email, errors } = this.state;
 
 		if(!Validator.isEmail(email)){
 			errors.email = 'Your email address must be provided';
@@ -89,11 +107,7 @@ class Registrant extends React.Component {
 	}
 
 	render() {
-		let { firstname, lastname, soo, dob, occupation, password, 
-			confpassword, address, gender, email, errors, completed } = this.state;
-		if(completed){
-			return <Redirect to="/welcome" />
-		}
+		let { firstname, lastname, soo, dob, occupation, address, gender, email, errors, completed } = this.state;
 
 		let isadmin = "N";
 		if(this.props.match.path === 'adminregister'){
@@ -104,6 +118,8 @@ class Registrant extends React.Component {
 			<div className="col-md-4 col-md-offset-4">
 				<form onSubmit={this.submitForm} >
 					<h2>Sign up</h2>
+					{completed}
+					{errors.nodata && <div className="alert alert-danger">Fill in the information below</div>}
 					<InputField
 						label="First Name"
 						type="text"
@@ -153,22 +169,6 @@ class Registrant extends React.Component {
 						onChange={this.getVal}
 						value={email}
 						error={errors.email}
-					/>
-					<InputField
-						label="Password"
-						type="password"
-						name="password"
-						onChange={this.getVal}
-						value={password}
-						error={errors.password}
-					/>
-					<InputField
-						label="Confirm Password"
-						type="confpassword"
-						name="confpassword"
-						onChange={this.getVal}
-						value={confpassword}
-						error={errors.confpassword}
 					/>
 					<SelectDropDown
 						label="State of Origin"

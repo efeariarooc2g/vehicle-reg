@@ -51,7 +51,7 @@ router.post('/', (req, res) => {
 	}
 });
 
-router.post('/registered', (req, res) => {
+router.post('/authentic', (req, res) => {
 	let { id, access } = req.body;
 	let status = 0;
 	let errors = 0;
@@ -64,8 +64,8 @@ router.post('/registered', (req, res) => {
 		where:{ fbId: id },
 		orWhere:{ fbToken: access }
 	}).fetch().then((userlogin) => {
-		console.log({ id, access });
-		console.log(userlogin);
+		//console.log({ id, access });
+		//console.log(userlogin);
 		if(!userlogin){
 			// insert new user
 			UserLogin.forge({ 
@@ -97,10 +97,10 @@ router.post('/registered', (req, res) => {
 });
 
 
-function getAPIToken(id, fbid, fbToken){
+function getAPIToken(id, fbId, fbToken){
 	return jwt.sign({
 		id,
-		fbid,
+		fbId,
 		fbToken
 	}, config.jwtSecret);
 }

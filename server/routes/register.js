@@ -4,24 +4,59 @@ import Validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
 import User from '../db/models/user';
 import bcrypt from 'bcrypt';
+import getLoggedInUser from '../sfuncs/sessiondetails';
 
 let router = express.Router();
 
+router.get('/', (req, res) => {
+	let authtoken = req.headers['authorization'];
+	
+	let userdetails = {};
+	getLoggedInUser(authtoken.split(' ')[1]).then((sessioindetails) => {
+		userdetails = sessioindetails;
+		console.log('The FBID');
+		console.log(userdetails.fbId);
+		if(userdetails.fbId){
+			let fbId = userdetails.fbId;
+			User.query({
+				select: ['firstname', 'lastname', 'soo', 'dob', 'email',  
+			 			'occupation','address', 'gender', 'isadmin'],
+				where: { fbId }
+			}).fetch().then((user) => {
+				if(user){
+					res.json(user);
+				} else {
+					res.status(400).json(false);
+				}
+			});
+		}
+	});;
+});
+
 router.post('/', (req, res) => {
 	let errors = validateInput(req.body);
-	const { firstname, lastname, soo, dob, occupation, password, 
-			confpassword, address, gender, isadmin, email } = req.body;
+	const { firstname, lastname, soo, dob, occupation, 
+		 address, gender, isadmin, email } = req.body;
+
+	let authtoken = req.headers['authorization'];
+
+	let { fbId } = getLoggedUser(authtoken.split(' ')[1]);
+
 	if(isEmpty(errors)){
 		if(doesValExist({ email })){
 			errors.email = "Email already exists";
+		}
+
+		if(doesValExist({ fbId })){
+			errors.fbId = "Email already exists";
 		}
 	}
 
 	if(isEmpty(errors)){
 		let password_hash = bcrypt.hashSync(password, 10);
 		console.log('On the matter');
-		User.forge({ firstname, lastname, soo, dob, occupation, password_hash,
-		 address, gender, email, isadmin }).save()
+		User.forge({ firstname, lastname, soo, dob, occupation,
+		 address, gender, email, isadmin, fbId }).save()
 		.then(user => {
 			res.json({ success: true });
 		})
@@ -47,8 +82,8 @@ function doesValExist(data){
 }
 
 function validateInput(body){
-	const { firstname, lastname, soo, dob, occupation, password, 
-			confpassword, address, gender, email } = body;
+	const { firstname, lastname, soo, dob, 
+		occupation,address, gender, email } = body;
 	let errors = {};
 
 	if(Validator.isEmpty(firstname)){
@@ -70,20 +105,11 @@ function validateInput(body){
 	if(Validator.isEmpty(dob)){
 		errors.dob = "This field must be provided";
 	}
-	if(Validator.isEmpty(password)){
-		errors.password = "This field must be provided";
-	}
 	if(Validator.isEmpty(email)){
 		errors.email = "This field must be provided";
 	}
 	if(Validator.isEmpty(email)){
 		errors.email = "This field must be provided";
-	}
-	if(Validator.isEmpty(confpassword)){
-		errors.confpassword = "This field must be provided";
-	}
-	if(!Validator.equals(password, confpassword)){
-		errors.password = "Password must be same as the Password Confirmation";
 	}
 
 	return errors;

@@ -73,7 +73,7 @@ class App extends Component {
     }
   }
   checkIfUserExists(id, access){
-    axios.post('/api/login/registered', {id, access}).then((data) => {
+    axios.post('/api/login/authentic', {id, access}).then((data) => {
       let token = data.data.token;
       this.setSession(token);
     });

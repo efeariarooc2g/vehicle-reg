@@ -51,7 +51,40 @@ router.post('/', (req, res) => {
 });
 
 router.post('/registered', (req, res) => {
-	let token
+	let { id, access } = req.body;
+	let status = 0;
+
+	Access.forge({
+		fbId,
+		fbToken: access,
+		userToken: token
+	}).fetch().then((access) => {
+		if(!access){
+			// insert new user
+			Access.forge({ 
+				fbId: id,
+				fbToken: access,
+
+
+			}).save().then((access) => {
+				if(access){
+					status = 1;
+				} else {
+					res.status(400).json({ error: 'User not saved'})
+				}
+			});
+		} else {
+			status = 2;
+		}
+	}));
 });
+
+
+getAPIToken(id, access){
+	return jwt.sign({
+	let userToken =	id,
+		access
+	}, config.jwtSecret);
+}
 
 export default router;

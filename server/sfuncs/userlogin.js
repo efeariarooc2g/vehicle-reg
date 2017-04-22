@@ -30,6 +30,8 @@ router.post('/', (req, res) => {
 			where: { email: username }
 		}).fetch().then((user) => {
 			if(user){ console.log(user);
+				console.log(user);
+				console.log(password);
 				if(bcrypt.compareSync(password, user.get('password_hash'))){
 					let token = jwt.sign({
 						id: user.get('id'),

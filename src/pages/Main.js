@@ -2,9 +2,10 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Registrant from './Registrant';
-import Welcome from './Welcome';
-import Login from './Login';
-import UserProfile from './UserProfile';
+import VehicleRegister from './VehicleRegister';
+import Application from './Application';
+import MyApplications from './MyApplications';
+import Applications from './Applications';
 
 class Main extends React.Component{
 	render(){
@@ -13,11 +14,12 @@ class Main extends React.Component{
 			<div className="container">
 				<Navigation {...props} />
 				<Route path="/signup" component={Registrant} />
-				<Route path="/welcome" component={Welcome} />
 				<Route path="/adminregister" component={Registrant} />
-				<Route path="/UserProfile" component={UserProfile} />
-				<Route path="/VehicleRegister" component={Welcome} />
-				<Route path="/Applcations" component={Login} />
+				<Route path="/application" component={Application} />
+				<Route path="/application/edit/:id" component={VehicleRegister} />
+				<Route path="/application/new" component={VehicleRegister} />
+				<Route path="/myapplications" component={MyApplications} />
+				<Route path="/applcations" component={Applications} />
 			</div>
 		);
 	}

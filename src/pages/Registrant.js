@@ -30,6 +30,7 @@ class Registrant extends React.Component {
 			gender: '',
 			occupation: '',
 			soo: '',
+			isadmin: '',
 			errors: {},
 			completed: false
 		}
@@ -39,6 +40,13 @@ class Registrant extends React.Component {
 	}
 
 	componentDidMount(){
+
+		let isadmin = "N";
+		if(this.props.match.path === 'adminregister'){
+			isadmin = "Y";
+			this.setState({ isadmin });
+		}
+
 		axios.get('/api/register')
 		.then((data) => {
 			let user = data.data;
@@ -108,11 +116,6 @@ class Registrant extends React.Component {
 
 	render() {
 		let { firstname, lastname, soo, dob, occupation, address, gender, email, errors, completed } = this.state;
-
-		let isadmin = "N";
-		if(this.props.match.path === 'adminregister'){
-			isadmin = "Y";
-		}
 
 		return (
 			<div className="col-md-4 col-md-offset-4">
@@ -185,14 +188,6 @@ class Registrant extends React.Component {
 						value={gender}
 						error={errors.gender}
 						options={genders}
-					/>
-					<InputField
-						label=""
-						type="hidden"
-						name="isadmin"
-						onChange={this.getVal}
-						value={isadmin}
-						error={errors.isadmin}
 					/>
 					
 					<SubmitButton 

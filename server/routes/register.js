@@ -12,10 +12,8 @@ router.get('/', (req, res) => {
 	let authtoken = req.headers['authorization'];
 	
 	let userdetails = {};
-	getLoggedInUser(authtoken.split(' ')[1]).then((sessioindetails) => {
-		userdetails = sessioindetails;
-		console.log('The FBID');
-		console.log(userdetails.fbId);
+	getLoggedInUser(authtoken.split(' ')[1]).then((userdetails) => {
+		
 		if(userdetails.fbId){
 			let fbId = userdetails.fbId;
 			User.query({

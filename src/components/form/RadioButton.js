@@ -7,10 +7,9 @@ class RadioButton extends Component {
 		
 		return (
 			<div className={'form-group ' + hasError}>
-				<div className="radio">
+				<div className={type}>
 				<label>
 					<input 
-						className="form-control"
 						id={id}
 						name={name} 
 						type={type} 
@@ -18,8 +17,9 @@ class RadioButton extends Component {
 						onChange={onChange} 
 					/>
 					{label}
-					</label>
+				</label>
 				{error && <span className="help-block">{error}</span>}
+			</div>
 			</div>
 		);
 	}
@@ -28,12 +28,9 @@ class RadioButton extends Component {
 RadioButton.propTypes = {
 	name: React.PropTypes.string.isRequired,
 	type: React.PropTypes.string.isRequired,
-	value: React.PropTypes.string.isRequired,
+	value: React.PropTypes.string,
 	onChange: React.PropTypes.func.isRequired
 }
 
-RadioButton.defaultProps = {
-	type: "text"
-}
 
-export default InputField;
+export default RadioButton;

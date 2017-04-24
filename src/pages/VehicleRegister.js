@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
 import axios from 'axios';
 import InputField from '../components/form/InputField';
@@ -12,6 +13,10 @@ let apptypelist = {
 	"CM":"Commercial", "AR":"Articulated", "PR":"Private", "BK":"Motorcycle" 
 };
 
+let states = {
+	"AB":"Abia", "AD":"Adamawa", "AN":"Anambra", "AK":"Akwa Ibom" 
+};
+
 class VehicleReg extends React.Component {
 	constructor(props){
 		super(props);
@@ -22,7 +27,9 @@ class VehicleReg extends React.Component {
 			applocal: '', 
 			appaddress: '', 
 			isnew: '', 
-			errors: {}
+			geodata: {},
+			errors: {},
+			completed: false
 		}
 
 		this.getVal = this.getVal.bind(this);
@@ -37,6 +44,22 @@ class VehicleReg extends React.Component {
 		});
 		let errors = validate(e, this.state.errors);
 		this.setState({ errors });
+	}
+
+	getLocation(e){
+		let address = e.target.value;
+		let latlong = {};
+		if(address !== ''){
+			this.setState({ appaddress: e.target.value });
+			address = address.replace(' ', '+');
+			axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyCQYon3ANp3QhaGPizK6h3qB5Udx4pGTBs`)
+			.then((data) => {
+				latlong = data.data.results.geometry.location;
+				//let lat = latlong.lat;
+				//let long = latlong.lng;
+				this.setState({ geodata: latlong });
+			});
+		}
 	}
 
 	submitForm(e){
@@ -65,8 +88,12 @@ class VehicleReg extends React.Component {
 	}
 
 	render() {
-		let { apptype, testscore, applocal, appaddress, isnew, errors } = this.state;
+		let { apptype, testscore, applocal, appaddress, isnew, geodata, errors } = this.state;
 		
+		if(this.state.completed){
+			return <Redirect to="/myapplications" />;
+		}
+
 		return (
 			<div className="col-md-4 col-md-offset-4">
 				<form onSubmit={this.submitForm} >
@@ -88,14 +115,15 @@ class VehicleReg extends React.Component {
 						error={errors.testscore}
 					/>
 					
-					<InputField
-						label="Location of Application"
-						type="text"
+					<SelectDropDown
+						label="State of Application"
 						name="applocal"
 						onChange={this.getVal}
 						value={applocal}
 						error={errors.applocal}
+						options={states}
 					/>
+
 					<InputField
 						label="Residential Address"
 						type="text"
@@ -104,6 +132,12 @@ class VehicleReg extends React.Component {
 						value={appaddress}
 						error={errors.appaddress}
 					/>
+					{geodata && <span>{`${geodata.lat}, ${geodata.long}`}</span>}
+					<div className="form-group">
+						<label htmlFor="isnew">
+							Is this your first time requesting or a renewal?
+						</label>
+					</div>
 					<RadioButton
 						label="First Time"
 						type="radio"

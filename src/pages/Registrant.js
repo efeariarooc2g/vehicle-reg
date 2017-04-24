@@ -120,7 +120,7 @@ class Registrant extends React.Component {
 		return (
 			<div className="col-md-4 col-md-offset-4">
 				<form onSubmit={this.submitForm} >
-					<h2>Sign up</h2>
+					<h2>Personal Information</h2>
 					{completed}
 					{errors.nodata && <div className="alert alert-danger">Fill in the information below</div>}
 					<InputField

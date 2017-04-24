@@ -29,8 +29,7 @@ class Navigation extends React.Component {
 	        <ul className="nav navbar-nav navbar-right">
 	          <li><Link to="/home">Home</Link></li>
 	          <li><Link to="/myapplications">My Registrations</Link></li>
-	          <li><Link to="/home">All Registrations</Link></li>
-	          <li><Link to="/adminregister">Register as Admin</Link></li>
+	          <li><Link to="/applications">All Registrations</Link></li>
 	          <li><Link to="/signup">My Personal Data</Link></li>
 	          <li><a onClick={this.logOut.bind(this)}>Logout</a></li>
 	        </ul>

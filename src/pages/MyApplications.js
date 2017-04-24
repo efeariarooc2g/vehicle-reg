@@ -6,7 +6,7 @@ import SubmitButton from '../components/form/SubmitButton';
 class MyApplications extends React.Component{
 	render(){
 		let headings = ['Application Type', 
-					'Test Tcore', 
+					'Test Tscore', 
 					'Location of Application', 
 					'Residentianl Address', 
 					'New/Renewal',
@@ -15,7 +15,7 @@ class MyApplications extends React.Component{
 		return (
 			<div className="col-mod-9">
 				<h2>My Vehicle Applications</h2>
-				<div className="btn btn-default btn-sm"><Link to='/application/new/'>New Application</Link></div>
+				<div className="btn btn-default btn-sm"><Link to="/application/new">New Application</Link></div>
 				<table className="table striped-table">
 					<Thead headings={headings} />
 					<Table />
@@ -106,7 +106,7 @@ class Row extends React.Component {
 				<td>{id}</td>
 				<td>{username}</td>
 				<td>{email}</td>
-				<td><div className="btn btn-default btn-sm"><Link to={`/application/edit/${id}`}>Edit</Link></div></td>
+				<td><Link to={`/application/edit/${id}`}><div className="btn btn-default btn-sm">Edit</div></Link></td>
 				<td><SubmitButton type="button" classType="btn-default btn-sm" name="Delete" value={idx} ClickFn={deleteFn} /></td>
 			</tr>
 		);
@@ -115,8 +115,8 @@ class Row extends React.Component {
 
 
  let Thead = ({ headings }) => {
- 	let data = headings.map((heading) => {
- 		return <td>{heading}</td>;
+ 	let data = headings.map((heading, index) => {
+ 		return <td key={'head' + index}>{heading}</td>;
  	});
 
  	return (

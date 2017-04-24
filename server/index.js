@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 
 import register from './routes/register';
 import userlogin from './routes/userauth';
+import processapp from './routes/processapp';
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(bodyParser.json());
 
 app.use('/api/register', register);
 app.use('/api/login', userlogin);
+app.use('/api/application', processapp);
 
 const PORT = 3003;
 app.listen(PORT, () => {

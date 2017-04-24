@@ -14,12 +14,13 @@ class Main extends React.Component{
 			<div className="container">
 				<Navigation {...props} />
 				<Route path="/signup" component={Registrant} />
+				
 				<Route path="/adminregister" component={Registrant} />
-				<Route path="/application" component={Application} />
+				<Route exact path="/application" component={Application} />
 				<Route path="/application/edit/:id" component={VehicleRegister} />
 				<Route path="/application/new" component={VehicleRegister} />
 				<Route path="/myapplications" component={MyApplications} />
-				<Route path="/applcations" component={Applications} />
+				<Route path="/applications" component={Applications} />
 			</div>
 		);
 	}

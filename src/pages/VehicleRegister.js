@@ -52,7 +52,7 @@ class VehicleReg extends React.Component {
 		if(address !== ''){
 			this.setState({ appaddress: e.target.value });
 			address = address.replace(' ', '+');
-			axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyCQYon3ANp3QhaGPizK6h3qB5Udx4pGTBs`)
+			axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=<API KEY>`)
 			.then((data) => {
 				latlong = data.data.results.geometry.location;
 				//let lat = latlong.lat;
@@ -132,6 +132,7 @@ class VehicleReg extends React.Component {
 						value={appaddress}
 						error={errors.appaddress}
 					/>
+
 					{geodata && <span>{`${geodata.lat}, ${geodata.long}`}</span>}
 					<div className="form-group">
 						<label htmlFor="isnew">

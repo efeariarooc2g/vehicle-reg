@@ -6,6 +6,7 @@ import User from '../db/models/user';
 import bcrypt from 'bcrypt';
 import getLoggedInUser from '../sfuncs/sessiondetails';
 import verifyUser from '../sfuncs/verifyUser';
+import email from '../sfuncs/sendemail';
 
 let router = express.Router();
 

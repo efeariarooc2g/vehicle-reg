@@ -55,6 +55,8 @@ router.post('/authentic', (req, res) => {
 	let { id, access } = req.body;
 	let status = 0;
 	let errors = 0;
+	let reviewer = 'N';
+	let processor = 'N';
 
 	if(Validator.isEmpty(id) || Validator.isEmpty(access)){
 		res.status(401).json({ error: 'Invalid Credentials'});
@@ -70,16 +72,19 @@ router.post('/authentic', (req, res) => {
 			// insert new user
 			UserLogin.forge({ 
 				fbId: id,
-				fbToken: access
+				fbToken: access,
+				reviewer, processor
 			}, { hasTimestamps: true }).save().then((newlogin) => {
 				if(newlogin){
 					let token = getAPIToken(
 						newlogin.get('id'), 
 						newlogin.get('fbId'), 
-						newlogin.get('fbToken')
+						newlogin.get('fbToken'),
+						newlogin.get('reviewer'),
+						newlogin.get('processor')
 					);
 					status = 1;
-					res.json({ token, status })
+					res.json({ token, status, reviewer, processor })
 				} else {
 					res.status(400).json({ error: 'User not saved'})
 				}
@@ -88,20 +93,53 @@ router.post('/authentic', (req, res) => {
 			let token = getAPIToken(
 				userlogin.get('id'), 
 				userlogin.get('fbId'), 
-				userlogin.get('fbToken')
+				userlogin.get('fbToken'),
+				userlogin.get('reviewer'),
+				userlogin.get('processor')
 			);
+			reviewer = username.get('reviewer');
+			processor = userlogin.get('processor');
 			status = 2;
-			res.json({ token, status });
+			res.json({ token, status, reviewer, processor });
 		}
 	});
 });
 
+router.post('/access/set', verifyUser, function(req, res){
+	let { id, fbId, fbToken, reviewer, processor, admintype } = req.body;
+	if(typeof id !== 'undefined' || id !== ''){
+		if(admintype !== ''){
+			if(admintype === 'reviewer'){
+				reviewer = 'Y';
+			} else if (admintype === 'processor') {
+				processor = 'Y';
+			}
 
-function getAPIToken(id, fbId, fbToken){
+			// update user to reviewer
+			Userlogin.forge({ id: req.body.id }).save({ reviewer, processor });
+			.then((userlogin) => {
+				if(userlogin){
+					// create new token
+					let token = getAPIToken(id, fbId, fbToken, reviewer, processor);
+
+					res.json({ token });
+				} else {
+					res.status(400).json({ error: 'No update' });
+				}
+			});
+		}
+	}
+});
+
+
+function getAPIToken(id, fbId, fbToken, reviewer, processor){
+
 	return jwt.sign({
 		id,
 		fbId,
-		fbToken
+		fbToken,
+		reviewer,
+		processor
 	}, config.jwtSecret);
 }
 

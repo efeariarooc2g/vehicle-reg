@@ -15,7 +15,9 @@ class App extends Component {
     this.FB = {};
 
     this.state = {
-      isLoggedin: false
+      isLoggedin: false,
+      reviewer: 'N',
+      processor: 'N'
     };
     this.initFBSDK = this.initFBSDK.bind(this);
     this.loadFBSDK = this.loadFBSDK.bind(this);
@@ -103,18 +105,22 @@ class App extends Component {
   setSession(token){
     if(!isEmpty(token)){
       localStorage.setItem('vehJwtToken', token);
+      localStorage.setItem('reviewer', reviewer);
+      localStorage.setItem('processor', processor);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
       localStorage.removeItem('vehJwtToken');
+      localStorage.removeItem('reviewer');
+      localStorage.removeItem('processor');
       delete axios.defaults.headers.common['Authorization'];
     }
   }
   checkIfUserExists(id, access){
     axios.post('/api/login/authentic', {id, access}).then((data) => {
-      let token = data.data.token;
-      this.setSession(token);
-    }
-    ).catch((response) => {
+      let { token, reviewer, processor } = data.data;
+      this.setSession(token, reviewer, processor);
+      this.setState({ reviewer, processor});
+    }).catch((response) => {
       this.setSession('');
       this.setState({ isLoggedin: false });
     });
@@ -124,8 +130,8 @@ class App extends Component {
     console.log(this.state);
 
     let fbAPI = this.FB;
-    let isLoggedin = this.state.isLoggedin;
-    let props = { fbAPI, isLoggedin };
+    let { isLoggedin, reviewer, processor } = this.state;
+    let props = { fbAPI, isLoggedin, reviewer, processor };
     return (
         <Route path="/" render={() => 
           <MyCheck {...props} />

@@ -39,9 +39,20 @@ class VehicleReg extends React.Component {
 
 
 	getVal(e){
-		this.setState({
-			[e.target.name]: e.target.value
-		});
+		if(e.target.name === 'testscore'){
+			let input = e.target.value;
+			if(!Number.isNaN(input) && !isNaN(input)){
+				this.setState({
+					[e.target.name]: e.target.value
+				});	
+			}
+		} else {
+			this.setState({
+				[e.target.name]: e.target.value
+			});	
+		}
+
+
 		let errors = validate(e, this.state.errors);
 		this.setState({ errors });
 	}
@@ -52,7 +63,7 @@ class VehicleReg extends React.Component {
 		if(address !== ''){
 			this.setState({ appaddress: e.target.value });
 			address = address.replace(' ', '+');
-			axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=<API KEY>`)
+			axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyCQYon3ANp3QhaGPizK6h3qB5Udx4pGTBs`)
 			.then((data) => {
 				latlong = data.data.results.geometry.location;
 				//let lat = latlong.lat;

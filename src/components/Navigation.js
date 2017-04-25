@@ -16,45 +16,38 @@ class Navigation extends React.Component {
 		this.setState({ isAuthentic: this.props.isLoggedin });
 	}
 
-	logOut(){
-		window.FB.logout((response) => {
-			this.setState({ isAuthentic: false });
-		});
-	}
+
 	render () {
 		let links = '';
 		let { reviewer, processor } = this.props;
 
 		if(this.state.isAuthentic){
 			if(processor === 'Y'){
-
 				links = (
 			        <ul className="nav navbar-nav navbar-right">
-			          <li><Link to="/home">Home</Link></li>
 			          <li><Link to="/myapplications">My Registrations</Link></li>
 			          <li><Link to="/applications">All Registrations</Link></li>
 			          <li><Link to="/signup">My Personal Data</Link></li>
-			          <li><a onClick={this.logOut.bind(this)}>Logout</a></li>
+			          <li><a onClick={this.logOut}>Logout</a></li>
 			        </ul>
 			      );
 			} else if(reviewer === 'Y'){
 				links = (
 			        <ul className="nav navbar-nav navbar-right">
-			          <li><Link to="/home">Home</Link></li>
 			          <li><Link to="/myapplications">My Registrations</Link></li>
 			          <li><Link to="/applications">All Registrations</Link></li>
 			          <li><Link to="/signup">My Personal Data</Link></li>
-			          <li><a onClick={this.logOut.bind(this)}>Logout</a></li>
+			          <li><a onClick={this.props.logOut}>Logout</a></li>
 			        </ul>
+			        );
 			} else {
 				links = (
 			        <ul className="nav navbar-nav navbar-right">
-			          <li><Link to="/home">Home</Link></li>
 			          <li><Link to="/myapplications">My Registrations</Link></li>
-			          <li><Link to="/applications">All Registrations</Link></li>
 			          <li><Link to="/signup">My Personal Data</Link></li>
-			          <li><a onClick={this.logOut.bind(this)}>Logout</a></li>
+			          <li><a onClick={this.props.logOut}>Logout</a></li>
 			        </ul>
+			    );
 			}
 	    } else {
 	      links = (

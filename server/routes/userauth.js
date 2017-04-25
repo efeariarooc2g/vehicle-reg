@@ -5,6 +5,7 @@ import User from '../db/models/user';
 import UserLogin from '../db/models/userlogin';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import verifyUser from '../sfuncs/verifyUser';
 //import config from '../../config';
 
 let router = express.Router();
@@ -97,7 +98,7 @@ router.post('/authentic', (req, res) => {
 				userlogin.get('reviewer'),
 				userlogin.get('processor')
 			);
-			reviewer = username.get('reviewer');
+			reviewer = userlogin.get('reviewer');
 			processor = userlogin.get('processor');
 			status = 2;
 			res.json({ token, status, reviewer, processor });
@@ -116,7 +117,7 @@ router.post('/access/set', verifyUser, function(req, res){
 			}
 
 			// update user to reviewer
-			Userlogin.forge({ id: req.body.id }).save({ reviewer, processor });
+			Userlogin.forge({ id: req.body.id }).save({ reviewer, processor })
 			.then((userlogin) => {
 				if(userlogin){
 					// create new token

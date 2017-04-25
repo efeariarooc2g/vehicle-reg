@@ -11,6 +11,14 @@ let verifyUser = (req, res, next) => {
 			req.body.fbToken = userdetails.fbToken;
 			req.body.reviewer = userdetails.reviewer;
 			req.body.processor = userdetails.processor;
+			User.query({
+				where: { applicant: userdetails.id }
+			}).fetch().then(user => {
+				if(user){
+					req.body.name = user.get('firstname') + ' ' + user.get('lastname');
+					req.body.email = user.get('email');
+				}
+			});
 			next();
 		} else {
 				res.status(401).json({ error: 'Invalid Credentials'});

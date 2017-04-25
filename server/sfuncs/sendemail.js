@@ -17,7 +17,7 @@ let email = (mailOptions) => {
         if(!mailOptions){
             mailOptions = {
                 from: '"Uche C 👻" <naijaphilia@gmail.com>', // sender address
-                to: 'ucchikezie@yahoo.com, // list of receivers
+                to: 'ucchikezie@yahoo.com', // list of receivers
                 subject: 'Hello ✔', // Subject line
                 text: 'Hello world ?', // plain text body
                 html: '<b>Hello world ?</b>' // html body

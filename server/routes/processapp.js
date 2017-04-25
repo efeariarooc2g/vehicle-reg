@@ -47,7 +47,39 @@ router.post('/new', verifyUser, (req, res) => {
 		User.forge({ appType: apptype, appLocal: applocal, testScore: testscore, geoData: geodata,  
 		isNew: isnew, appAddress: appaddress, applicant: userid }).save()
 		.then(user => {
-			res.json({ success: true });
+			//get reviewers
+			userlogin.query({
+				where: { reviewer: 'Y'}
+			}).fetch().then((reviewers) => {
+				if(reviewers){
+					let reviewerid = reviewers.get('id');
+					User.forge({ applicant }).fetch().then(user => {
+						if(user){
+							let remailaddress = user.get('email');
+							let rname = user.get('firstname') + ' ' + user.get('lastname');
+							let useremail = req.body.email;
+							let userfullname = req.body.name;
+							// prep email
+							let body = `<h3>New Application</h3>
+								${userfullname} just completed a new application
+							`;
+
+							mailOptions = {
+				                from: '"Uche C 👻" <naijaphilia@gmail.com>', // sender address
+				                to: remailaddress, // list of receivers
+				                subject: 'Completion of Application', // Subject line
+				                //text: 'Hello world ?', // plain text body
+				                html: body // html body
+				            };
+							// send mail notification
+							email(mailOptions).then(info => {
+								res.json({ success: true });
+							});
+						}
+					});
+				}
+			});
+			
 		})
 		.catch((err) => {
 			console.log('I messed up');

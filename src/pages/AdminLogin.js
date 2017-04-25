@@ -20,7 +20,7 @@ class AppReviewer extends React.Component{
 	}
 	componentWillMount(){
 		// confirm as admin
-		axios.get('/api/login/reviewer').then((data) => {
+		axios.get('/api/login/access/set').then((data) => {
 			let token = data.data.token;
 			this.setReviewer(token);
 		});

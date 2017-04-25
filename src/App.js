@@ -21,6 +21,7 @@ class App extends Component {
     };
     this.initFBSDK = this.initFBSDK.bind(this);
     this.loadFBSDK = this.loadFBSDK.bind(this);
+    this.logOut = this.logOut.bind(this);
     this.checkIfLoggedin = this.checkIfLoggedin.bind(this);
   }
 
@@ -102,7 +103,7 @@ class App extends Component {
     }
   }
 
-  setSession(token){
+  setSession(token,reviewer,processor){
     if(!isEmpty(token)){
       localStorage.setItem('vehJwtToken', token);
       localStorage.setItem('reviewer', reviewer);
@@ -121,8 +122,20 @@ class App extends Component {
       this.setSession(token, reviewer, processor);
       this.setState({ reviewer, processor});
     }).catch((response) => {
+      this.setSession('');this.setState({ 
+        isLoggedin: false, 
+        reviewer: 'N', 
+        processor: 'N' });
+    });
+  }
+
+  logOut(){
+    this.props.FB.logout((response) => {
       this.setSession('');
-      this.setState({ isLoggedin: false });
+      this.setState({ 
+        isLoggedin: false, 
+        reviewer: 'N', 
+        processor: 'N' });
     });
   }
 
